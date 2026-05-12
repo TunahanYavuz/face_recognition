@@ -11,6 +11,7 @@ DRIVE_MOUNT_POINT = "/content/drive"
 TRAIN_DIR = "/content/drive/MyDrive/FaceProject/oyuncu_yuzleri"
 TEST_DIR = "/content/drive/MyDrive/FaceProject/test_images"
 CASCADE_PATH = cv2.data.haarcascades + "haarcascade_frontalface_default.xml"
+MIN_TEXT_Y_POSITION = 20
 
 
 def get_lbph_recognizer():
@@ -70,6 +71,7 @@ def prepare_training_data(train_dir, cascade):
 
 
 def annotate_test_images(test_dir, cascade, recognizer, label_to_name, threshold=70):
+    # threshold: LBPH için düşük confidence daha iyi eşleşme demektir.
     for file_name in sorted(os.listdir(test_dir)):
         if not file_name.lower().endswith(".jpg"):
             continue
@@ -98,7 +100,7 @@ def annotate_test_images(test_dir, cascade, recognizer, label_to_name, threshold
             cv2.putText(
                 image,
                 text,
-                (x, max(y - 10, 20)),
+                (x, max(y - 10, MIN_TEXT_Y_POSITION)),
                 cv2.FONT_HERSHEY_SIMPLEX,
                 0.8,
                 color,
